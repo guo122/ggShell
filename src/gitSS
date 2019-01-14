@@ -1,0 +1,33 @@
+#!/bin/bash
+
+IFS=$'\n'
+
+dir_list=`ls -l | grep ^d`
+
+echo ""
+echo "		Commit	Push"
+
+for i in ${dir_list[@]} ; do
+	cd ${i##*\ }
+	tmpResult=`git status 2>/dev/null`
+
+	# 合法git项目目录
+	if [ "$?" == 0 ] ; then
+		echo $tmpResult | grep -q "nothing to commit, working tree clean"
+		if [ $? == 1 ] ; then
+			isEdit="o"
+		else
+			isEdit="."
+		fi
+		
+		echo $tmpResult | grep -q "use \"git push\" to publish your local commits"
+		if [ $? == 0 ] ; then
+			isPush="o"
+		else
+			isPush="."
+		fi
+
+		echo ${i##*\ }"		"${isEdit}"	"${isPush}
+	fi
+	cd ..
+done
