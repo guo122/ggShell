@@ -1,0 +1,61 @@
+#!/bin/bash
+
+#IFS=$'\n'
+
+cd ~
+homePath=`pwd`
+cd - 1>/dev/null
+confPath=${homePath}/etc/tuon.conf
+tmpFile=${homePath}/etc/.tuon.tmp
+
+getList() {
+    for cur in `jq -r .operation[].name ${confPath}`
+    do  
+        echo -n "$cur: "
+        echo `jq -r '.operation[] | select(.name == "'$cur'") | .description' ${confPath}`
+    done
+}
+
+formatPath() {
+	tmpStr=`echo $1 | sed 's#\ #\\\ #g'`
+	echo $tmpStr
+}
+
+execCmd() {
+	i=0
+	args=""
+	while [ $i -lt $3 ]
+	do   
+		arg=`echo $2 | jq -r .[$i]`
+		arg=`formatPath "$arg"`
+
+		if [ $i != 0 ] ; then
+			args=${args}" "
+		fi
+		args=${args}${arg}
+
+		i=`expr $i + 1`
+	done  
+
+	echo "$1 $args" > $tmpFile
+	eval `cat $tmpFile`
+	rm $tmpFile
+}
+
+if [ "$1" == "" ] ; then
+	getList
+else
+	result=`jq -r '.operation[] | select(.name == "'$1'") | .exec' ${confPath}`
+	if [ "$result" != "" ] ; then
+		# 取得命令exec
+		for cur in `echo $result | jq -r '.[].cmd'`
+		do
+			args=`echo $result | jq '.[] | select(.cmd == "'$cur'") | .args'`
+			execCmd $cur "$args" `echo $args | jq '. | length'`
+		done
+	else
+		getList
+	fi
+fi
+
+
