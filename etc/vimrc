@@ -16,6 +16,7 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'ddollar/nerdcommenter'
 "Plugin 'mattn/emmet-vim'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'Raimondi/delimitMate'

@@ -4,7 +4,7 @@ IFS=$'\n'
 
 dir_list=`ls -l | grep ^d`
 
-echo " Commit  Push"
+echo "Commit Push"
 
 for i in ${dir_list[@]} ; do
 	cd ${i##*\ }
@@ -14,16 +14,16 @@ for i in ${dir_list[@]} ; do
 	if [ "$?" == 0 ] ; then
 		echo $tmpResult | grep -q "nothing to commit, working tree clean"
 		if [ $? == 1 ] ; then
-			echo -en "[\033[31mCOMMIT\033[0m]"
+			echo -en "[\033[31m--\033[0m] "
 		else
-			echo -en "[\033[32m  OK  \033[0m]"
+			echo -en "[\033[32mOK\033[0m] "
 		fi
 		
 		echo $tmpResult | grep -q "use \"git push\" to publish your local commits"
 		if [ $? == 0 ] ; then
-			echo -en "[\033[31mPUSH\033[0m]"
+			echo -en "[\033[31m--\033[0m]"
 		else
-			echo -en "[\033[32m OK \033[0m]"
+			echo -en "[\033[32mOK\033[0m]"
 		fi
 
 		echo " "${i##*\ }
