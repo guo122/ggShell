@@ -15,11 +15,11 @@ if [ "$?" == 0 ] ; then
 		m_commit=1
 	fi
 
-	echo $ret | grep -q "use \"git push\" to publish your local commits"
+	echo $ret | grep -q "Your branch is up to date"
 	if [ "$?" == 0 ] ; then
-		m_push=1
-	else
 		m_push=0
+	else
+		m_push=1
 	fi
 	
 	if [ $m_commit == 0 -a $m_push == 0 ] ; then
