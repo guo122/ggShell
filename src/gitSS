@@ -4,28 +4,29 @@ IFS=$'\n'
 
 dir_list=`ls -l | grep ^d`
 
+test_cmd=ggitStatus
+type ${test_cmd} > /dev/null 2>&1 || { echo -e >&2 "[\033[31m${test_cmd}\033[0m] not installed."; exit 1; }
+
 echo "Commit Push"
 
 for i in ${dir_list[@]} ; do
 	cd ${i##*\ }
-	tmpResult=`git status 2>/dev/null`
 
-	# 合法git项目目录
-	if [ "$?" == 0 ] ; then
-		echo $tmpResult | grep -q "nothing to commit, working tree clean"
-		if [ $? == 1 ] ; then
-			echo -en "[\033[31m--\033[0m] "
-		else
+	ret=`ggitStatus`
+
+	if [ "$ret" != -1 ] ; then
+		if [ "$ret" == 0 -o "$ret" == 2 ] ; then
 			echo -en "[\033[32mOK\033[0m] "
+		else
+			echo -en "[\033[31m--\033[0m] "
 		fi
 		
-		echo $tmpResult | grep -q "use \"git push\" to publish your local commits"
-		if [ $? == 0 ] ; then
+		if [ "$ret" == 2 -o "$ret" == 3 ] ; then
 			echo -en "[\033[31m--\033[0m]"
 		else
 			echo -en "[\033[32mOK\033[0m]"
 		fi
-
+	
 		echo " "${i##*\ }
 	fi
 	cd ..

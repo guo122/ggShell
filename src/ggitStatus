@@ -1,0 +1,41 @@
+#!/bin/bash
+
+test_cmd=git
+type ${test_cmd} > /dev/null 2>&1 || { echo -e >&2 "[\033[31m${test_cmd}\033[0m] not installed."; exit 1; }
+
+ret=`git status 2>/dev/null`
+
+if [ "$?" == 0 ] ; then
+	git config --local user.name "guo122"
+	git config --local user.email "balanuard@163.com"
+	echo $ret | grep -q "nothing to commit, working tree clean"
+	if [ "$?" == 0 ] ; then
+		m_commit=0
+	else
+		m_commit=1
+	fi
+
+	echo $ret | grep -q "use \"git push\" to publish your local commits"
+	if [ "$?" == 0 ] ; then
+		m_push=1
+	else
+		m_push=0
+	fi
+	
+	if [ $m_commit == 0 -a $m_push == 0 ] ; then
+		# all clean
+		echo 0
+	elif [ $m_commit == 1 -a $m_push == 0 ] ; then
+		# no commit
+		echo 1
+	elif [ $m_commit == 0 -a $m_push == 1 ] ; then
+		# no push
+		echo 2
+	else
+		# no commit no push
+		echo 3
+	fi
+else
+	# wrong
+	echo -1
+fi

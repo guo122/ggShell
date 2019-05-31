@@ -1,0 +1,43 @@
+#!/bin/bash
+
+test_cmd=ggitStatus
+type ${test_cmd} > /dev/null 2>&1 || { echo -e >&2 "[\033[31m${test_cmd}\033[0m] not installed."; exit 1; }
+
+isOK() {
+	if [ "$1" == 0 -a "$2" == 0 ] ; then
+		echo 0
+	else
+		echo 1
+	fi
+}
+
+ret=`ggitStatus`
+
+if [ "$ret" == 0 ] ; then
+	`git checkout tmp_bridge_branch 2>/dev/null`
+	if [ "$?" == 0 ] ; then
+		echo -e "[\033[31mERROR\033[0m] please clean tmp bridge branch."
+	else
+		ret=0
+		git checkout --orphan tmp_bridge_branch
+		ret=`isOK $ret $?`
+		git add -A
+		ret=`isOK $ret $?`
+		git commit -am "new commit" >/dev/null
+		ret=`isOK $ret $?`
+		git branch -D master
+		ret=`isOK $ret $?`
+		git branch -m master
+		ret=`isOK $ret $?`
+		if [ "$ret" == 0 ] ; then
+			echo "pushing..."
+			git push -f origin master
+		else
+			echo -e "[\033[31mERROR\033[0m] something happen."
+		fi
+	fi
+elif [ "$ret" == -1 ] ; then
+	echo -e "[\033[35mFAIL\033[0m] no git repos."
+else
+	echo -e "[\033[31mERROR\033[0m] please clean first."
+fi
