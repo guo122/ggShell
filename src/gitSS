@@ -27,6 +27,7 @@ for i in ${dir_list[@]} ; do
 			echo -en "[\033[32mOK\033[0m]"
 		fi
 	
+		echo -en " \033[36m"`ggitGetCurrentBranch`"\033[0m"
 		echo " "${i##*\ }
 	fi
 	cd ..

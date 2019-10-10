@@ -1,0 +1,17 @@
+#!/bin/bash
+
+dir=.
+until [ "$dir" -ef / ]; do
+	if [ -f "$dir/.git/HEAD" ]; then
+		head=$(< "$dir/.git/HEAD")
+		if [[ $head = ref:\ refs/heads/* ]]; then
+			echo "(${head#*/*/})"
+		elif [[ $head != '' ]]; then
+			echo "((detached))"
+		else
+			echo "((unknow))"
+		fi  
+		break
+	fi  
+	dir="../$dir"
+done

@@ -5,6 +5,7 @@ src_array=(
 	"src/fad"
 	"src/ggitResetMaster"
 	"src/ggitStatus"
+	"src/ggitGetCurrentBranch"
 	"src/gitSS"
 	"src/mmpic"
 	"src/mmvv"
