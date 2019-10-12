@@ -13,11 +13,14 @@ for i in ${dir_list[@]} ; do
 	ret=`ggitStatus`
 
 	if [ "$ret" != -1 ] ; then
-		# is up to date
-		if [ "${ret:1:1}" == 1 ] ; then
-			echo -en "\033[32m*\033[0m"
-		else
-			echo -en "\033[31m*\033[0m"
+		# is remote
+		if [ "${ret:5:1}" == 1 ] ; then
+			# is up to date
+			if [ "${ret:1:1}" == 1 ] ; then
+				echo -en "\033[32m*\033[0m"
+			else
+				echo -en "\033[31m*\033[0m"
+			fi
 		fi
 
 		# is clean

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# __is_clean__is_uptodate__is_added__is_changes__is_untracked
+# __is_clean__is_uptodate__is_added__is_changes__is_untracked__is_remote
 
 test_cmd=git
 type ${test_cmd} > /dev/null 2>&1 || { echo -e >&2 "[\033[31m${test_cmd}\033[0m] not installed."; exit 1; }
@@ -53,9 +53,18 @@ __is_untracked() {
     fi
 }
 
+__is_remote() {
+	echo $ret | grep -q "Your branch is"
+    if [ "$?" == 0 ] ; then
+        echo 1
+    else
+        echo 0
+    fi
+}
+
 
 if [ "$ret_r" == 0 ] ; then
-	echo `__is_clean``__is_uptodate``__is_added``__is_changes``__is_untracked`
+	echo `__is_clean``__is_uptodate``__is_added``__is_changes``__is_untracked``__is_remote`
 else
 	# wrong
 	echo -1
