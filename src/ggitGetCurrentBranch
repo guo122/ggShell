@@ -5,11 +5,11 @@ until [ "$dir" -ef / ]; do
 	if [ -f "$dir/.git/HEAD" ]; then
 		head=$(< "$dir/.git/HEAD")
 		if [[ $head = ref:\ refs/heads/* ]]; then
-			echo "(${head#*/*/})"
+			echo "${head#*/*/}"
 		elif [[ $head != '' ]]; then
-			echo "((detached))"
+			echo "(detached)"
 		else
-			echo "((unknow))"
+			echo "(unknow)"
 		fi  
 		break
 	fi  
