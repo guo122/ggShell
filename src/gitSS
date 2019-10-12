@@ -27,7 +27,7 @@ for i in ${dir_list[@]} ; do
 		if [ "${ret:0:1}" == 1 ] ; then
 			echo -en "(\033[32m"`ggitGetCurrentBranch`"\033[0m)"
 		else
-			echo -en "(\033[36m"`ggitGetCurrentBranch`"\033[0m "
+			echo -en "(\033[35m"`ggitGetCurrentBranch`"\033[0m "
 			# is untracked
 			if [ "${ret:4:1}" == 1 ] ; then
 				echo -en "\033[31m-\033[0m"
