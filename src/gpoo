@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ "$1" == "--pull" ] ; then
+	_name=`ggitRemoteUrlSwap`
+	git pull
+	ggitRemoteUrlSwap "${_name}"
+elif [ "$1" == "--silence" ] ; then
+	_name=`ggitRemoteUrlSwap`
+	_git_pull_ret=`git pull`
+	ggitRemoteUrlSwap "${_name}"
+else
+    _name=`ggitRemoteUrlSwap`
+    echo "${_name} -> https"
+    git pull
+    ggitRemoteUrlSwap "${_name}"
+    echo "https -> ${_name}"
+fi
+

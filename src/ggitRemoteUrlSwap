@@ -1,0 +1,25 @@
+#!/bin/bash
+
+test_cmd=git
+type ${test_cmd} > /dev/null 2>&1 || { echo -e >&2 "[\033[31m${test_cmd}\033[0m] not installed."; exit 1; }
+
+git status > /dev/null 2>&1
+
+if [ "$?" == 0 ] ; then
+	_config_remote_origin_url=`git config --local --list|grep remote.origin.url=`
+	_origin_url=${_config_remote_origin_url##remote.origin.url=}
+	_http_url=`echo ${_origin_url} | grep https://github.com`
+	if [ "$_http_url" == "" ] ; then
+		_repos=${_origin_url##*\/}
+		_url=${_origin_url%\/*}
+		_user=${_url##*:}
+		_prefix=${_url%:*}
+		echo $_prefix
+		git config --local remote.origin.url "https://github.com/${_user}/${_repos}"
+	elif [ "$1" != "" ] ; then
+		_repos=${_http_url##*\/}
+		_url=${_http_url%\/*}
+		_user=${_url##*\/}
+		git config --local remote.origin.url "${1}:${_user}/${_repos}"
+	fi
+fi

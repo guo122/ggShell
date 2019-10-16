@@ -13,6 +13,11 @@ for i in ${dir_list[@]} ; do
 	ret=`ggitStatus`
 
 	if [ "$ret" != -1 ] ; then
+		if [ "$1" == "--gpoo" ] ; then
+			echo -e "\033[34m-------------------------------------------------\033[0m"
+			gpoo --pull
+		fi
+
 		# is remote
 		if [ "${ret:5:1}" == 1 ] ; then
 			# is up to date
