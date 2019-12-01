@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -f "$2"."$1" -a -d "out" ] ; then
+	export MAGICK_HOME="$HOME/ImageMagick-7.0.8"
+	export PATH="$MAGICK_HOME/bin:$PATH"
+	export DYLD_LIBRARY_PATH="$MAGICK_HOME/lib/"
+	convert "$2"."$1" -crop 1375x1375+481+323 out/"$2"."$1"
+else
+	echo "wrong"
+fi

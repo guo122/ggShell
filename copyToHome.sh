@@ -1,6 +1,7 @@
 #!/bin/bash
 
 src_array=(
+	"src/cccto"
 	"src/cpmerge"
 	"src/fad"
 	"src/ggitResetMaster"
