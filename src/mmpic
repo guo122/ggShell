@@ -8,42 +8,45 @@
 # rename by modify time.
 # eg: 170714_104000
 
-# work path
+mkdir ~/Downloads/_o_ 2>/dev/null
+cd ~/Downloads/_o_/
+_out_path=`pwd`
+
 cd ~/Downloads/_/
-workpath=`pwd`
+_work_path=`pwd`
 
 IFS=$'\n'
 
-appendSuffix=$1
+_appendSuffix=$1
 
-num=0
-for cur in $workpath/*
+_num=0
+for cur in $_work_path/*
 do
-	num=`expr $num + 1`
-	echo $num
+	_num=`expr $_num + 1`
+	echo $_num
 	# get file suffix
-	suffix=${cur##*.}
-    if [ "$suffix" == "$cur" ] ; then
-		suffix=""
+	_suffix=${cur##*.}
+    if [ "$_suffix" == "$cur" ] ; then
+		_suffix=""
     else
-		suffix="."${suffix}
+		_suffix="."${_suffix}
     fi
 
 	# get modify time
-	mtime=`stat -s $cur`
-	mtime=${mtime##*st_mtime=}
-	mtime=${mtime%%\ *}
-	mtimes=`date -r $mtime "+%y%m%d_%H%M%S"`
+	_mtime=`stat -s $cur`
+	_mtime=${_mtime##*st_mtime=}
+	_mtime=${_mtime%%\ *}
+	_mtimes=`date -r $_mtime "+%y%m%d_%H%M%S"`
 
 	# if already existed
-	while [ -f ${workpath}/${mtimes}${suffix} ] ; do
-		mtime=`expr $mtime + 1`
-		mtimes=`date -r $mtime "+%y%m%d_%H%M%S"`
+	while [ -f ${_out_path}/${_mtimes}${_suffix} ] ; do
+		_mtime=`expr $_mtime + 1`
+		_mtimes=`date -r $_mtime "+%y%m%d_%H%M%S"`
 	done
 
-	filename=${mtimes}${appendSuffix}${suffix}
-	mv -i $cur ${workpath}/${filename}
+	_filename=${_mtimes}${_appendSuffix}${_suffix}
+	mv -i $cur ${_out_path}/${_filename}
 
 	echo $cur
-	echo $filename
+	echo $_filename
 done
