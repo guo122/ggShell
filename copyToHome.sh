@@ -4,6 +4,7 @@ src_array=(
 	"src/cccto"
 	"src/cpmerge"
 	"src/fad"
+	"src/ggBasicFunc"
 	"src/ggitResetMaster"
 	"src/ggitStatus"
 	"src/ggitGetCurrentBranch"

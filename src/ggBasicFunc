@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# $1 pid
+#
+# 	0:  disappear
+# 	1:	exist
+_is_pid_exist() {
+	_pid=`ps -ef | grep $1 | grep -v grep | awk '{print $2}'`
+	if [ "$_pid" == "" ] ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# $1 srcPath
+# $2 dstPath
+_progress() {
+	if [ -e "$1" -a -e "$2" ] ; then
+		_srcSize=`du -s "$1" | awk '{print $1}'`
+		_dstSize=`du -s "$2" | awk '{print $1}'`
+		ret=`echo $_dstSize $_srcSize | awk '{printf("%.2f", $1/$2)}'`
+		echo $ret
+	else
+		echo 0
+	fi
+}
+
+# $1 pid
+# $2 srcPath
+# $3 dstPath
+_running_progress() {
+	_bFirst=1
+	while true
+	do
+		if [ $_bFirst == 1 ] ; then
+			_pro="0.00"
+		else
+			_pro=`_progress "$2" "$3"`
+		fi
+		echo -en "$_pro\r"
+		sleep 0.2 
+		_is_pid_exist $1
+		if [ $? == 0 ] ; then
+			_pro=`_progress "$2" "$3"`
+			echo -e "$_pro\r"
+			break
+		fi
+		_bFirst=0
+	done
+}
+
+#example
+#cp "$1" "$2" &
+#_running_progress $! "$1" "$2"
