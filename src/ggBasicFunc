@@ -44,12 +44,60 @@ _running_progress() {
 		if [ $? == 0 ] ; then
 			_pro=`_progress "$2" "$3"`
 			echo -e "$_pro\r"
-			break
+			wait $1
+			if [ $? == 0 ] ; then
+				return 0
+			else
+				return 1
+			fi
 		fi
 		_bFirst=0
 	done
+	return 1
 }
 
 #example
 #cp "$1" "$2" &
 #_running_progress $! "$1" "$2"
+
+
+# $1 file/dir
+# $2 [saveSizeFile] default .xxx.tmpSaveFileSizexixi
+_save_du_size() {
+    if [ -e "$1" ] ; then
+        size=`du -s "$1" | awk '{print $1}'`
+		if [ "$2" == "" ] ; then
+			saveSizeFilename=.${1%\/}.tmpSaveFileSizexixi
+		else
+			saveSizeFilename=$2
+		fi
+		echo $size > "$saveSizeFilename"
+		echo $saveSizeFilename
+    fi
+}
+
+# $1 file/dir
+# $2 [saveSizeFile] default .xxx.tmpSaveFileSizexixi
+#
+#	0: mismatch
+#	1: match
+_match_du_size() {
+	if [ "$2" == "" ] ; then
+		saveSizeFilename=.${1%\/}.tmpSaveFileSizexixi
+	else
+		saveSizeFilename="$2"
+	fi
+    if [ -e "$1" -a -f "$saveSizeFilename" ] ; then
+        _size=`du -s "$1" | awk '{print $1}'`
+        _fileSavedSize=`cat "$saveSizeFilename"`
+		echo $saveSizeFilename
+        if [ "$_size" == "$_fileSavedSize" ] ; then
+            return 1
+        else
+            return 0
+        fi
+    else
+        return 0
+    fi
+}
+
