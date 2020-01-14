@@ -1,0 +1,19 @@
+#!/bin/bash
+
+_work_path=`pwd`
+
+IFS=$'\n'
+
+_list=`ls`
+
+if [ "$1" != "" ] ; then
+	for cur in ${_list[@]}
+	do
+		_suffix=${cur##*\.}
+		_filename=${cur%*\.$_suffix}
+		_num=${#_filename}
+		_num=`expr $_num - $1`
+		_dst=${_filename:0:$_num}.${_suffix}
+		mv -i ${cur} ${_dst}
+	done
+fi

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+_work_path=`pwd`
+
+IFS=$'\n'
+
+_list=`ls`
+
+if [ "$1" != "" -a "$2" != "" ] ; then
+	for cur in ${_list[@]}
+	do
+		_first=${cur:0:$1}
+		_second=${cur#$_first*}
+		mv -i ${cur} ${_first}${2}${_second}
+	done
+fi
