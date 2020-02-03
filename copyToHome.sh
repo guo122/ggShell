@@ -1,6 +1,7 @@
 #!/bin/bash
 
 src_array=(
+	"src/alrand"
 	"src/cccto"
 	"src/cpmerge"
 	"src/fad"

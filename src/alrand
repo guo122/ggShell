@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#date "+%a%b%c%d%sasdfasfdsdf"|md5|tr 'a-z' 'A-Z';date|md5|tr 'a-z' 'A-Z'|pbcopy
+_ss_string="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-="
+
+RANDOM=`date +%s`
+_ret=""
+for i in {1..16}
+do
+	_ss=`expr $RANDOM % 76`
+	_ret=${_ret}${_ss_string:$_ss:1}
+done
+echo $_ret
