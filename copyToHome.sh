@@ -5,6 +5,7 @@ src_array=(
 	"src/cccto"
 	"src/cpmerge"
 	"src/fad"
+	"src/gfindcompare"
 	"src/ggBasicFunc"
 	"src/ggitResetMaster"
 	"src/ggitStatus"

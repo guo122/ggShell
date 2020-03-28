@@ -1,0 +1,19 @@
+#!/bin/bash
+
+cd ~/etc/gfindcompare
+_workPath=`pwd`
+cd - > /dev/null
+
+if [ "a$1" != "a" -a -d "$1" -a "a$2" != "a" -a -d "$2" ] ; then
+	rm -f $_workPath/a $_workPath/b
+	cd "$1"
+	find . > $_workPath/a
+	cd - >/dev/null
+	cd "$2"
+	find . > $_workPath/b
+	cd - >/dev/null
+	cd $_workPath
+	git diff a b
+else
+	echo "format error."
+fi
